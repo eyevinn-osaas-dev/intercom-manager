@@ -1,0 +1,36 @@
+name: Repository dispatch to update fork and remake in OSC development environment
+on:
+  repository_dispatch:
+    types: [deploy]
+
+jobs:
+  deploy:
+    name: Deploy to OSC development environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/Eyevinn/intercom-manager.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Check for updates
+        id: check
+        run: |
+          if git diff --quiet HEAD upstream/main; then
+            echo "updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "updated=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Merge upstream changes
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          git checkout main
+          git merge upstream/main
+          git push origin main
