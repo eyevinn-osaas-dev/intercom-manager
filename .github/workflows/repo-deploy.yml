@@ -3,6 +3,9 @@ on:
   repository_dispatch:
     types: [deploy]
 
+permissions:
+  contents: write  # Required to push commits
+  
 jobs:
   deploy:
     name: Deploy to OSC development environment
