@@ -5,7 +5,8 @@ on:
 
 permissions:
   contents: write  # Required to push commits
-  
+  actions: write   # Required to modify workflow files (if upstream changes are made)
+
 jobs:
   deploy:
     name: Deploy to OSC development environment
