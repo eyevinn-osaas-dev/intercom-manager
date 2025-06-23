@@ -47,6 +47,12 @@ jobs:
 
       - name: Trigger remake in OSC dev
         run: |
-          npx -y @osaas/cli@latest --env dev admin remake-order eyevinnintercom-manager -y
+          npx -y @osaas/cli@latest --env dev admin remake-order eyevinnintercom-manager -y --wait
         env:
           OSC_API_KEY: ${{ secrets.OSC_API_KEY }}
+
+      - name: Restart instance
+        run: |
+          npx -y @osaas/cli@latest --env dev restart eyevinn-intercom-manager dev
+        env:
+          OSC_ACCESS_TOKEN: ${{ secrets.OSC_ACCESS_TOKEN }}
